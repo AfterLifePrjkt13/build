@@ -1839,6 +1839,18 @@ function _complete_android_module_names() {
     COMPREPLY=( $(allmod | grep -E "^$word") )
 }
 
+# Make using all available CPUs
+function mka() {
+    case `uname -s` in
+        Darwin)
+            m "$@" -j `sysctl hw.ncpu|cut -d" " -f2`
+            ;;
+        *)
+            m "$@" -j `cat /proc/cpuinfo | grep "^processor" | wc -l`
+            ;;
+    esac
+}
+
 # Print colored exit condition
 function pez {
     "$@"
